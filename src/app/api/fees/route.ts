@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { calculateFees } from "@/lib/fees";
 import { GATEWAYS } from "@/lib/gateways";
+import { isMockDemo } from "@/lib/config";
+import { MOCK_DASHBOARD } from "@/lib/mockData";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -19,9 +21,21 @@ export async function GET(request: NextRequest) {
     r.totalFee < min.totalFee ? r : min
   );
 
-  return NextResponse.json({
+  const base = {
     amount,
     results,
     cheapestGatewayId: cheapest.gateway.id,
-  });
+  };
+
+  if (isMockDemo()) {
+    return NextResponse.json({
+      ...base,
+      source: "mock" as const,
+      demoMeta: {
+        sampleCalculations24h: MOCK_DASHBOARD.feeCalculations,
+      },
+    });
+  }
+
+  return NextResponse.json({ ...base, source: "live" as const });
 }

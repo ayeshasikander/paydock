@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Webhook, Calculator, Library, FileText } from "lucide-react";
 import { Card } from "@/components/ui/Card";
+import { MockStats } from "@/components/dashboard/MockStats";
 
 const quickActions = [
   {
@@ -36,6 +37,7 @@ export default function Home() {
         <p className="text-xs sm:text-sm text-[#94a3b8] mb-1">PayDev Hub</p>
         <h1 className="text-xl sm:text-2xl font-bold text-[#f1f5f9]">Dashboard</h1>
       </div>
+      <MockStats />
       <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {quickActions.map(({ href, title, description, icon: Icon }) => (
           <Link key={href} href={href}>

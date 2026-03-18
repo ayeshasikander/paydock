@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addWebhook, getWebhooks, clearWebhooks } from "@/lib/webhookDb";
+import { isMockDemo } from "@/lib/config";
+import {
+  getMockWebhookStore,
+  pushMockWebhook,
+  clearMockWebhookStore,
+} from "@/lib/mockWebhookStore";
 
 function headersToRecord(headers: Headers): Record<string, string> {
   const record: Record<string, string> = {};
@@ -12,6 +18,14 @@ function headersToRecord(headers: Headers): Record<string, string> {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
+    if (isMockDemo()) {
+      const id = pushMockWebhook({
+        method: "POST",
+        headers: headersToRecord(request.headers),
+        body,
+      });
+      return NextResponse.json({ success: true, id, mock: true });
+    }
     const id = await addWebhook({
       method: "POST",
       headers: headersToRecord(request.headers),
@@ -29,6 +43,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
+    if (isMockDemo()) {
+      return NextResponse.json(getMockWebhookStore());
+    }
     const webhooks = await getWebhooks();
     return NextResponse.json(webhooks);
   } catch (e) {
@@ -43,6 +60,10 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ success: false }, { status: 400 });
   }
   try {
+    if (isMockDemo()) {
+      clearMockWebhookStore();
+      return NextResponse.json({ success: true, mock: true });
+    }
     await clearWebhooks();
     return NextResponse.json({ success: true });
   } catch (e) {

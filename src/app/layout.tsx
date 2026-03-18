@@ -4,6 +4,7 @@ import { Syne, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { DemoBanner } from "@/components/layout/DemoBanner";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -38,6 +39,7 @@ export default function RootLayout({
           </Link>
         </header>
         <main className="min-h-screen w-full min-w-0 pl-0 pt-14 md:pt-0 md:pl-60 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
+          <DemoBanner />
           {children}
         </main>
       </body>
