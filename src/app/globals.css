@@ -1,26 +1,65 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0f172a;
+  --surface: #1e293b;
+  --accent: #10b981;
+  --accent-hover: #34d399;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #334155;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.font-mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
 }
 
+/* Pulsing status dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  50% { opacity: 0.9; }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Card hover lift + green border glow */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 24px rgba(16, 185, 129, 0.15);
+  border-color: var(--accent);
+}
+
+/* Responsive: prevent horizontal scroll, touch-friendly */
+html {
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+/* Webhook row flash on arrival */
+@keyframes flash-green {
+  0% { background-color: rgba(16, 185, 129, 0.3); }
+  100% { background-color: transparent; }
+}
+.animate-flash-green {
+  animation: flash-green 1s ease-out;
 }
